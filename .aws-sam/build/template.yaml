@@ -42,6 +42,7 @@ Resources:
         Variables:
           LINE_CHANNEL_SECRET: ''
           LINE_CHANNEL_ACCESS_TOKEN: ''
+          GURUNAVI_ACCESS_KEY: ''
 Outputs:
   HelloWorldAPI:
     Description: API Gateway endpoint URL for Prod environment for First Function

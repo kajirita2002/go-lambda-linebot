@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"linebot/gurunavi"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -16,7 +18,6 @@ type Webhook struct {
 	Destination string           `json:"destination"`
 	Events      []*linebot.Event `json:"events"`
 }
-
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// botは*Client型
@@ -57,12 +58,34 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			// そのインターフェースを実装する型によって処理を分岐させることができます。
 			switch m := event.Message.(type) {
 			case *linebot.TextMessage:
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(m.Text)).Do(); err != nil {
-					log.Print(err)
-					return events.APIGatewayProxyResponse{
-						StatusCode: http.StatusInternalServerError,
-						Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", http.StatusText(http.StatusBadRequest)),
-					}, nil
+				switch request.Path {
+				case "/parrot":
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(m.Text)).Do(); err != nil {
+						log.Print(err)
+						return events.APIGatewayProxyResponse{
+							StatusCode: http.StatusInternalServerError,
+							Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", http.StatusText(http.StatusBadRequest)),
+						}, nil
+					}
+				case "/restaurants":
+					g, err := gurunavi.SearchRestaurants(m.Text)
+					if err != nil {
+						log.Print(err)
+						return events.APIGatewayProxyResponse{
+							StatusCode: http.StatusInternalServerError,
+							Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", http.StatusText(http.StatusInternalServerError)),
+						}, nil
+					}
+					var t string
+					switch {
+					case g.Error != nil:
+						t = g.Error[0].Message
+					default:
+						t = TextRestaurants(g)
+					}
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(t)).Do(); err != nil {
+						log.Fatal(err)
+					}
 				}
 			}
 		}

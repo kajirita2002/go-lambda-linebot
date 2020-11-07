@@ -18,7 +18,7 @@ type Webhook struct {
 }
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	_, err := linebot.New(
+	bot, err := linebot.New(
 		os.Getenv("LINE_CHANNEL_SECRET"),
 		os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
 	)
@@ -40,6 +40,22 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 			StatusCode: http.StatusBadRequest,
 			Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", http.StatusText(http.StatusBadRequest)),
 		}, nil
+	}
+
+	for _, event := range webhook.Events {
+		switch event.Type {
+		case linebot.EventTypeMessage:
+			switch m := event.Message.(type) {
+			case *linebot.TextMessage:
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(m.Text)).Do(); err != nil {
+					log.Print(err)
+					return events.APIGatewayProxyResponse{
+						StatusCode: http.StatusInternalServerError,
+						Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", http.StatusText(http.StatusBadRequest)),
+					}, nil
+				}
+			}
+		}
 	}
 
 	return events.APIGatewayProxyResponse{

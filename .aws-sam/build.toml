@@ -5,3 +5,8 @@
 codeuri = "hello-world/"
 runtime = "go1.x"
 functions = ["HelloWorldFunction"]
+
+[build_definitions.8a2b665f-22f2-4358-8b12-f62a9c38dfc4]
+codeuri = "linebot/"
+runtime = "go1.x"
+functions = ["LineBotFunction"]

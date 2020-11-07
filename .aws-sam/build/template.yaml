@@ -25,6 +25,19 @@ Resources:
       Environment:
         Variables:
           PARAM1: VALUE
+  LineBotFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: LineBot
+      CodeUri: LineBotFunction
+      Handler: linebot
+      Runtime: go1.x
+      Events:
+        Parrot:
+          Type: Api
+          Properties:
+            Path: /parrot
+            Method: POST
 Outputs:
   HelloWorldAPI:
     Description: API Gateway endpoint URL for Prod environment for First Function

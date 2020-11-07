@@ -44,6 +44,7 @@ Resources:
         Variables:
           LINE_CHANNEL_SECRET: ""
           LINE_CHANNEL_ACCESS_TOKEN: ""
+          GURUNAVI_ACCESS_KEY: ""
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

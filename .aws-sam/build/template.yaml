@@ -38,6 +38,10 @@ Resources:
           Properties:
             Path: /parrot
             Method: POST
+      Environment:
+        Variables:
+          LINE_CHANNEL_SECRET: ''
+          LINE_CHANNEL_ACCESS_TOKEN: ''
 Outputs:
   HelloWorldAPI:
     Description: API Gateway endpoint URL for Prod environment for First Function

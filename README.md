@@ -1,140 +1,112 @@
-# go-lambda-linebot
+[![Image from Gyazo](https://i.gyazo.com/7977673b0eb95f03160fb05ab630ff8a.png)](https://gyazo.com/7977673b0eb95f03160fb05ab630ff8a)
 
-This is a sample template for go-lambda-linebot - Below is a brief explanation of what we have generated for you:
+<h2 align="center">飲食店名検索bot</h2>
+<p align="center">
+  <a href="https://golang.org/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Go_Logo_Aqua.svg/1280px-Go_Logo_Aqua.svg.png" width="80px;"</a>
+  <a></a>
+</p>
 
-```bash
-.
-├── Makefile                    <-- Make to automate build
-├── README.md                   <-- This instructions file
-├── hello-world                 <-- Source code for a lambda function
-│   ├── main.go                 <-- Lambda function code
-│   └── main_test.go            <-- Unit tests
-└── template.yaml
-```
+<br>
 
-## Requirements
+## 👄 Overview
 
-* AWS CLI already configured with Administrator permission
-* [Docker installed](https://www.docker.com/community-edition)
-* [Golang](https://golang.org)
-* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+<h4>飲食店名を検索できるLineBotです。</h4>
+<h4>そのお店の詳細情報、地図表示、電話ができます。</h4>
+<h4>開発言語はGoでサーバー側を開発しました。</h4>
+<h4>AWS SAM(Serverless Application Model)CLIを使った、AWS Lambdaのデプロイを行いました。</h4>
 
-## Setup process
+<br>
 
-### Installing dependencies & building the target 
+## 📱 Usage
 
-In this example we use the built-in `sam build` to automatically download all the dependencies and package our build target.   
-Read more about [SAM Build here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-build.html) 
-
-The `sam build` command is wrapped inside of the `Makefile`. To execute this simply run
+<h4>デプロイ版(AWS)<h4>
  
-```shell
-make
-```
+### QRコードはこちらから
 
-### Local development
+[![Image from Gyazo](https://i.gyazo.com/0d13b971f0d05fbbd376c4631e64afc2.png)](https://gyazo.com/0d13b971f0d05fbbd376c4631e64afc2)
+  
 
-**Invoking function locally through local API Gateway**
 
-```bash
-sam local start-api
-```
+## ✋ Requirement
 
-If the previous command ran successfully you should now be able to hit the following local endpoint to invoke your function `http://localhost:3000/hello`
+* Go 1.14.2
+* aws-cli 2.0.55
+* sam-cli 1.8.0
 
-**SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to understand how to bootstrap this environment (runtime, where the source code is, etc.) - The following excerpt is what the CLI will read in order to initialize an API and its routes:
 
-```yaml
-...
-Events:
-    HelloWorld:
-        Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-        Properties:
-            Path: /hello
-            Method: get
-```
+<br> 
 
-## Packaging and deployment
+## Architechture
 
-AWS Lambda Golang runtime requires a flat folder with the executable generated on build step. SAM will use `CodeUri` property to know where to look up for the application:
+[![Image from Gyazo](https://i.gyazo.com/0a49374b734ab6b35c46e78395421c10.png)](https://gyazo.com/0a49374b734ab6b35c46e78395421c10)
 
-```yaml
-...
-    FirstFunction:
-        Type: AWS::Serverless::Function
-        Properties:
-            CodeUri: hello_world/
-            ...
-```
+## 📦 feature
 
-To deploy your application for the first time, run the following in your shell:
+<h3>- キーワード検索 -</h3>
 
-```bash
-sam deploy --guided
-```
+<br>
 
-The command will package and deploy your application to AWS, with a series of prompts:
+[![Image from Gyazo](https://i.gyazo.com/83677ebd4d8c0b3f0c9f38d840ff0bb4.gif)](https://gyazo.com/83677ebd4d8c0b3f0c9f38d840ff0bb4)
 
-* **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
-* **AWS Region**: The AWS region you want to deploy your app to.
-* **Confirm changes before deploy**: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
-* **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modified IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
-* **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
+<br>
 
-You can find your API Gateway Endpoint URL in the output values displayed after deployment.
+---
 
-### Testing
+<h3>- 地図を見る -</h3>
 
-We use `testing` package that is built-in in Golang and you can simply run the following command to run our tests:
+<br>
 
-```shell
-go test -v ./hello-world/
-```
-# Appendix
+[![Image from Gyazo](https://i.gyazo.com/5a9f58f66de03a13dabaf1ef30d55442.gif)](https://gyazo.com/5a9f58f66de03a13dabaf1ef30d55442)
 
-### Golang installation
+<br>
 
-Please ensure Go 1.x (where 'x' is the latest version) is installed as per the instructions on the official golang website: https://golang.org/doc/install
+---
 
-A quickstart way would be to use Homebrew, chocolatey or your linux package manager.
+<h3>- 電話する -</h3>
 
-#### Homebrew (Mac)
+<br>
 
-Issue the following command from the terminal:
+[![Image from Gyazo](https://i.gyazo.com/8fe8ac96751ffaaff0448872125b1034.gif)](https://gyazo.com/8fe8ac96751ffaaff0448872125b1034)
 
-```shell
-brew install golang
-```
+<br>
 
-If it's already installed, run the following command to ensure it's the latest version:
+---
 
-```shell
-brew update
-brew upgrade golang
-```
+<h3>- 詳細検索 -</h3>
 
-#### Chocolatey (Windows)
+<br>
 
-Issue the following command from the powershell:
+[![Image from Gyazo](https://i.gyazo.com/248c49463365467b709cb834de3b6334.gif)](https://gyazo.com/248c49463365467b709cb834de3b6334)
 
-```shell
-choco install golang
-```
+<br>
 
-If it's already installed, run the following command to ensure it's the latest version:
+---
 
-```shell
-choco upgrade golang
-```
 
-## Bringing to the next level
 
-Here are a few ideas that you can use to get more acquainted as to how this overall process works:
 
-* Create an additional API resource (e.g. /hello/{proxy+}) and return the name requested through this new path
-* Update unit test to capture that
-* Package & Deploy
+## 🗣Description
 
-Next, you can use the following resources to know more about beyond hello world samples and how others structure their Serverless applications:
 
-* [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/)
+### ○ aws samを使ってLambda環境でデプロイしました。
+### ○ LINE Messaging API SDKを使って、LINEBot開発の効率化を図りました。
+### ○ リッチな見た目のLINEメッセージを送ることのできるFlex Messageを使いました。
+### ○ 外部API(ぐるなびAPI)を叩きました。
+
+<br>
+
+
+
+## 💳 License
+
+- [MIT](https://raw.githubusercontent.com/aocattleya/Ramen-Timer/master/LICENSE) 
+
+<br>
+
+## 👨 Author
+
+- [Github](https://github.com/kajirita2002)
+
+- [FB](https://www.facebook.com/rita.kajimura.1/)
+
+- [Twitter](https://twitter.com/kiokisun_prog)

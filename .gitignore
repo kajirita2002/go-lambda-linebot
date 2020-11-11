@@ -1,3 +1,4 @@
 /.aws-sam
 .env.json
 *.log
+samconfig.toml

@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -37,6 +40,13 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// requestのログ
 	log.Print(request.Headers)
 	log.Print(request.Body)
+
+	if !validateSignature(os.Getenv("LINE_CHANNEL_SECRET"), request.Headers["X-Line-Signature"], []byte(request.Body)) {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+			Body:       fmt.Sprintf(`{"message":"%s"}`+"\n", linebot.ErrInvalidSignature.Error()),
+		}, nil
+	}
 
 	// リクエストのボディ部を格納するための構造体を定義
 	var webhook Webhook
@@ -100,6 +110,21 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
 	}, nil
+}
+
+func validateSignature(channelSecret string, signature string, body []byte) bool {
+	decoded, err := base64.StdEncoding.DecodeString(signature)
+	if err != nil {
+		return false
+	}
+
+	hash := hmac.New(sha256.New, []byte(channelSecret))
+	_, err = hash.Write(body)
+	if err != nil {
+		return false
+	}
+
+	return hmac.Equal(decoded, hash.Sum(nil))
 }
 
 func main() {

@@ -40,6 +40,11 @@ Resources:
           Properties:
             Path: /parrot
             Method: POST
+        Restaurant:
+          Type: Api
+          Properties:
+            Path: /restaurants
+            Method: POST
       Environment:
         Variables:
           LINE_CHANNEL_SECRET: ""
